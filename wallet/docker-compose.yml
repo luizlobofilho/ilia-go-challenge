@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  wallet:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_HOST=wallet-db
+      - DB_PORT=5432
+      - DB_USER=walletuser
+      - DB_PASSWORD=walletpass
+      - DB_NAME=walletdb
+      - JWT_SECRET=ILIACHALLENGE
+    depends_on:
+      - wallet-db
+    restart: unless-stopped
+  wallet-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: walletuser
+      POSTGRES_PASSWORD: walletpass
+      POSTGRES_DB: walletdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - wallet-db-data:/var/lib/postgresql/data
+volumes:
+  wallet-db-data:
