@@ -1,0 +1,6 @@
+# Lint Go code
+lint:
+  stage: test
+  image: golangci/golangci-lint:latest
+  script:
+    - golangci-lint run --timeout 5m
