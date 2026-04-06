@@ -18,3 +18,11 @@ func (r *UserRepository) GetByID(ctx context.Context, id string) (*domain.User, 
 	}
 	return &u, nil
 }
+
+func (r *UserRepository) Create(ctx context.Context, u *domain.User) error {
+	db := r.DB.GormDB().WithContext(ctx)
+	if err := db.Create(u).Error; err != nil {
+		return err
+	}
+	return nil
+}

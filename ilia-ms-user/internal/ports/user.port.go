@@ -7,4 +7,5 @@ import (
 
 type UserRepository interface {
 	GetByID(ctx context.Context, id string) (*domain.User, error)
+	Create(ctx context.Context, u *domain.User) error
 }

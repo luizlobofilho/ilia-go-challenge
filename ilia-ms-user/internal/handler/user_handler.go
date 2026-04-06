@@ -4,12 +4,14 @@ import (
 	"context"
 	"net/http"
 	"usersvc/internal/domain"
+	"usersvc/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserUsecase interface {
 	GetByID(ctx context.Context, id string) (*domain.User, error)
+	Create(ctx context.Context, u *domain.User) error
 }
 
 var userUsecase UserUsecase
@@ -28,4 +30,25 @@ func GetUserByID(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, u)
+}
+
+func CreateUser(c *gin.Context) {
+	var u domain.User
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid body"})
+		return
+	}
+	if userUsecase == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "usecase not initialized"})
+		return
+	}
+	if err := userUsecase.Create(context.Background(), &u); err != nil {
+		if err == usecase.ErrInvalidUser {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"status": "created", "user": u})
 }
