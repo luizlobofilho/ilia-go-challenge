@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  usersvc:
+    build: .
+    ports:
+      - "3002:3002"
+    environment:
+      - DB_HOST=users-db
+      - DB_PORT=5432
+      - DB_USER=usersuser
+      - DB_PASSWORD=userspass
+      - DB_NAME=usersdb
+      - JWT_SECRET=ILIACHALLENGE
+    depends_on:
+      - users-db
+  users-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: usersuser
+      POSTGRES_PASSWORD: userspass
+      POSTGRES_DB: usersdb
+    ports:
+      - "5434:5432"
+    volumes:
+      - users-db-data:/var/lib/postgresql/data
+volumes:
+  users-db-data:

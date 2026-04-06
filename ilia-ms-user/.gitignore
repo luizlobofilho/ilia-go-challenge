@@ -1,0 +1,49 @@
+# Go build
+/bin/
+/build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go modules
+/go.sum
+
+# Dependency directories (vendor/)
+vendor/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env
+.env
+.env.*
+
+# Docker
+users-db-data/
+
+# Migrations binaries
+migrate
+migrate.exe
+
+# Coverage
+coverage.out
+
+# Others
+*.local
+*.cache
