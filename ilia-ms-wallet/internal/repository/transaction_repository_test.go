@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-// testDBAdapter implementa ports.DatabaseConnection retornando *gorm.DB
+// testDBAdapter is a simple implementation of ports.DatabaseConnection for testing purposes
 type testDBAdapter struct{ DB *gorm.DB }
 
 func (a *testDBAdapter) GormDB() *gorm.DB { return a.DB }
 
-// newInMemoryDB cria um *gorm.DB em memória e aplica migrações necessárias
+// newInMemoryDB creates an in-memory *gorm.DB and applies necessary migrations
 func newInMemoryDB(t *testing.T) ports.DatabaseConnection {
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 	if err != nil {

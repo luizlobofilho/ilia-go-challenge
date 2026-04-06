@@ -19,6 +19,13 @@ Para rodar as migrations manualmente:
 # Exemplo (ajuste o caminho conforme necessário)
 migrate -path ./migrations -database "postgres://walletuser:walletpass@localhost:5433/walletdb?sslmode=disable" up
 ```
+### Testes
+Para rodar os testes unitários locais:
+
+```bash
+cd ilia-ms-wallet
+go test ./...
+```
 
 ### Variáveis de ambiente principais
 - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`: Configuração do Postgres
@@ -27,5 +34,5 @@ migrate -path ./migrations -database "postgres://walletuser:walletpass@localhost
 
 ### Endpoints
 - `GET /transactions` (protegido por JWT)
-
+- `POST /transactions` 
 ---
