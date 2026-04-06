@@ -29,6 +29,7 @@ func main() {
 	r.Use(middleware.JWTMiddleware())
 	// expose GET /users/:id
 	r.GET("/users/:id", handler.GetUserByID)
+	r.POST("/users", handler.CreateUser)
 
 	port := os.Getenv("PORT")
 	if port == "" {
