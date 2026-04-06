@@ -1,0 +1,81 @@
+definitions:
+  domain.Transaction:
+    properties:
+      amount:
+        type: number
+      id:
+        type: integer
+      type:
+        type: string
+      user_id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Create a new transaction with the provided information
+      parameters:
+      - description: Transaction to create
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Transaction'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new transaction
+      tags:
+      - transactions
+  /transactions/{id}:
+    get:
+      description: Get all transactions for a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get transactions for a user
+      tags:
+      - transactions
+swagger: "2.0"
