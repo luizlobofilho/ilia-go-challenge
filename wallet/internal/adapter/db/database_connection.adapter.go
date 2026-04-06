@@ -1,33 +1,24 @@
 package database
 
 import (
-	"context"
-	"wallet/internal/interfaces"
-
-	"github.com/jackc/pgx/v5"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
+// DatabaseConnectionAdapter wraps *gorm.DB
 type DatabaseConnectionAdapter struct {
-	Conn *pgx.Conn
+	DB *gorm.DB
 }
 
-type pgxRowsAdapter struct {
-	pgx.Rows
-}
-
-func (r *pgxRowsAdapter) Next() bool                     { return r.Rows.Next() }
-func (r *pgxRowsAdapter) Scan(dest ...interface{}) error { return r.Rows.Scan(dest...) }
-func (r *pgxRowsAdapter) Close()                         { r.Rows.Close() }
-func (r *pgxRowsAdapter) Err() error                     { return r.Rows.Err() }
-
-func (p *DatabaseConnectionAdapter) Query(ctx context.Context, sql string, args ...interface{}) (interfaces.Rows, error) {
-	rows, err := p.Conn.Query(ctx, sql, args...)
+// NewDatabaseConnectionAdapter opens GORM connection
+func NewDatabaseConnectionAdapter(dsn string) (*DatabaseConnectionAdapter, error) {
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
-	return &pgxRowsAdapter{rows}, nil
+	return &DatabaseConnectionAdapter{DB: db}, nil
 }
 
-func (p *DatabaseConnectionAdapter) Exec(ctx context.Context, sql string, args ...interface{}) (interfaces.Result, error) {
-	return p.Conn.Exec(ctx, sql, args...)
+func (a *DatabaseConnectionAdapter) GormDB() *gorm.DB {
+	return a.DB
 }
